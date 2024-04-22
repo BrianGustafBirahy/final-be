@@ -15,9 +15,9 @@ datasource db {
 
 model Mahasiswa {
   id_mhs Int @id @default(autoincrement())
-  nama_mhs String
-  email_mhs String @db.VarChar(50)
-  jurusan String @db.VarChar(50)
+  nama_mhs String 
+  email_mhs String 
+  jurusan String 
   Tingkat Int
 }
 
