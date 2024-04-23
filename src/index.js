@@ -9,6 +9,8 @@ dotenv.config();
 
 const port = process.env.PORT;
 const hostname = "127.0.0.1";
+
+////////////////////////////////////////////////////            GET ALL              ////////////////////////////////////////////////////
 //  Get all mahasiswa
 app.get("/mahasiswa", async (req, res) => {
   try {
@@ -23,6 +25,53 @@ app.get("/mahasiswa", async (req, res) => {
     res.status(500).send("Internal Server Error");
   }
 });
+
+//  Get all kegiatan
+app.get("/kegiatan", async (req, res) => {
+  try {
+    const allKegiatan = await prisma.kegiatan.findMany();
+    console.log(allKegiatan);
+    res.status(200).json({
+      status: "success",
+      data: allKegiatan,
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
+//  Get all Admin
+app.get("/admin", async (req, res) => {
+  try {
+    const allAdmin = await prisma.adminUniv.findMany();
+    console.log(allAdmin);
+    res.status(200).json({
+      status: "success",
+      data: allAdmin,
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
+//  Get all Pendaftaran
+app.get("/pendaftaran", async (req, res) => {
+  try {
+    const allPendaftaran = await prisma.pendaftaran.findMany();
+    console.log(allPendaftaran);
+    res.status(200).json({
+      status: "success",
+      data: allPendaftaran,
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
+
 
 //////// Tambahkan mahasiswa
 
@@ -63,6 +112,8 @@ app.get("/mahasiswa/:id_mhs", async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+
+
 
 app.listen(port, () =>
   console.log(`Server running at http://${hostname}:${port}`)
