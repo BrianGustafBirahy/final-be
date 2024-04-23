@@ -10,6 +10,18 @@ dotenv.config();
 const port = process.env.PORT;
 const hostname = "127.0.0.1";
 
+
+app.get("/", async (req, res) => {
+  try {
+    res.status(200).send("<H1>Home<H1>");
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
+
+
 ////////////////////////////////////////////////////            GET ALL              ////////////////////////////////////////////////////
 //  Get all mahasiswa
 app.get("/mahasiswa", async (req, res) => {
@@ -113,6 +125,27 @@ app.get("/mahasiswa/:id_mhs", async (req, res) => {
   }
 });
 
+
+///////////////////////////////////////////////////// Menambahkan /////////////////////////////////////////////////
+// app.post("/mendaftar", async (req, res) => {
+//   try {
+//     const {id_kegiatan } = req.body;
+//     const daftarKegiatan = await prisma.pendaftaran.create({
+//       data: {
+//         id_kegiatan : EW001,
+
+//       }
+//     });
+//     res.status(200).json({
+//       status: "success",
+//       data: daftarKegiatan,
+//     });
+//   } catch (err) {
+//     console.error(err);
+//     res.status(500).send("Internal Server Error");
+//   }
+// });
+// ///////////////////////ERRORR
 
 
 app.listen(port, () =>
