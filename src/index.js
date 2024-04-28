@@ -127,7 +127,9 @@ app.get("/mahasiswa/:id_mhs", async (req, res) => {
 
 
 ///////////////////////////////////////////////////// Menambahkan /////////////////////////////////////////////////
-// app.post("/mendaftar", async (req, res) => {
+
+/////////////////////////////////////////////// MAHASISWA //////////////////////////////////////////////////////
+// app.post("/pendaftaran", async (req, res) => {
 //   try {
 //     const {id_kegiatan } = req.body;
 //     const daftarKegiatan = await prisma.pendaftaran.create({
@@ -146,6 +148,50 @@ app.get("/mahasiswa/:id_mhs", async (req, res) => {
 //   }
 // });
 // ///////////////////////ERRORR
+
+// Melihat jadwal kegiatan yang diikuti
+// app.get("/jadwal", async (req, res) => {
+//   try {
+//     const { id_mhs } = req.params;
+//     const jadwalKegiatan = await prisma.jadwal.findMany({
+//       where: {
+//         id_mhs: id_mhs
+//       }
+//     });
+//     res.status(200).json({
+//       status: "success",
+//       data: jadwalKegiatan,
+//     });
+//   } catch (err) {
+//     console.error(err);
+//     res.status(500).send("Internal Server Error");
+//   }
+// });
+
+///////////////////////////////////belum jadi
+
+// Memberikan feedback dan rating terhadap kegiatan
+// app.post("/kegiatan/:id_kegiatan/feedback", async (req, res) => {
+//   try {
+//     const { id_mhs, rating, feedback } = req.body;
+//     const feedbackKegiatan = await prisma.feedback.create({
+//       data: {
+//         id_mhs: id_mhs,
+//         id_kegiatan: req.params.id_kegiatan,
+//         rating: rating,
+//         feedback: feedback
+//       }
+//     });
+//     res.status(200).json({
+//       status: "success",
+//       data: feedbackKegiatan,
+//     });
+//   } catch (err) {
+//     console.error(err);
+//     res.status(500).send("Internal Server Error");
+//   }
+// });
+//////////////////////////////////masih error
 
 
 app.listen(port, () =>
