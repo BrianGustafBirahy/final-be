@@ -1,12 +1,10 @@
 const express = require("express");
 const dotenv = require("dotenv")
 const {PrismaClient} = require("@prisma/client")
-// const bodyParser = require('body-parser');
 const prisma = new PrismaClient();
 const app = express();
 app.use(express.json());
 dotenv.config();
-// const db = require("../db")
 
 const port = process.env.PORT;
 const hostname = "127.0.0.1";
@@ -135,7 +133,7 @@ app.get("/admin", async (req, res) => {
 app.post("/admin", async (req, res) => {
   const { id_admin, nama_adm, email_adm } = req.body;
   try {
-    await prisma.kegiatan.create({
+    await prisma.adminUniv.create({
       data: {
         id_admin  : id_admin,
         nama_adm : nama_adm,
@@ -168,32 +166,31 @@ app.get("/pendaftaran", async (req, res) => {
   }
 });
 
+// Tambah pendaftaran
+app.post("/pendaftaran", async (req, res) => {
+  const { id_kegiatan, id_mhs, tgl_pdf } = req.body;
+  try {
+    await prisma.pendaftaran.create({
+      data: {
+        id_kegiatan  : id_kegiatan,
+        id_mhs : id_mhs,
+        tgl_pdf   : tgl_pdf
+      },
+    });
+    res.status(200).json({
+      status: "success",
+      message: "data berhasil dimasukan",
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Internal Server Error");
+  }
+});
 
 
 
 
 
-
-/////////////////////////////////////////////// MAHASISWA //////////////////////////////////////////////////////
-// app.post("/pendaftaran", async (req, res) => {
-//   try {
-//     const {id_kegiatan } = req.body;
-//     const daftarKegiatan = await prisma.pendaftaran.create({
-//       data: {
-//         id_kegiatan : EW001,
-
-//       }
-//     });
-//     res.status(200).json({
-//       status: "success",
-//       data: daftarKegiatan,
-//     });
-//   } catch (err) {
-//     console.error(err);
-//     res.status(500).send("Internal Server Error");
-//   }
-// });
-// ///////////////////////ERRORR
 
 // Melihat jadwal kegiatan yang diikuti
 // app.get("/mahasiswa/:id_mhs/jadwal", async (req, res) => {
