@@ -1,11 +1,12 @@
 const express = require("express");
 const dotenv = require("dotenv")
 const {PrismaClient} = require("@prisma/client")
-
+// const bodyParser = require('body-parser');
 const prisma = new PrismaClient();
 const app = express();
-
+app.use(express.json());
 dotenv.config();
+// const db = require("../db")
 
 const port = process.env.PORT;
 const hostname = "127.0.0.1";
@@ -87,26 +88,28 @@ app.get("/pendaftaran", async (req, res) => {
 
 //////// Tambahkan mahasiswa
 
-// app.post("/mahasiswa", async (req, res) => {
-//   const { nama_mhs, email_mhs, jurusan,Tingkat} = req.body;
-//   try {
-//     await prisma.mahasiswa.create({
-//       data: {
-//         nama_mhs  : "Janeighteen",
-//         email_mhs : "Janeighteen@gmail.com",
-//         jurusan   : "Bahasa Inggris",
-//         Tingkat   : 3
-//       },
-//     });
-//     res.status(200).json({
-//       status: "success",
-//       message: "data berhasil dimasukan",
-//     });
-//   } catch (err) {
-//     console.error(err);
-//     res.status(500).send("Internal Server Error");
-//   }
-// });
+app.post("/mahasiswa", async (req, res) => {
+  const { nama_mhs, email_mhs, jurusan, Tingkat } = req.body;
+  try {
+    await prisma.Mahasiswa.create({
+      data: {
+        nama_mhs  : nama_mhs,
+        email_mhs : email_mhs,
+        jurusan   : jurusan,
+        Tingkat   : Tingkat
+      },
+    });
+    res.status(200).json({
+      status: "success",
+      message: "data berhasil dimasukan",
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
+
 
 ////////////////////////// Masih error
 
@@ -150,7 +153,7 @@ app.get("/mahasiswa/:id_mhs", async (req, res) => {
 // ///////////////////////ERRORR
 
 // Melihat jadwal kegiatan yang diikuti
-// app.get("/jadwal", async (req, res) => {
+// app.get("/mahasiswa/:id_mhs/jadwal", async (req, res) => {
 //   try {
 //     const { id_mhs } = req.params;
 //     const jadwalKegiatan = await prisma.jadwal.findMany({
@@ -173,7 +176,7 @@ app.get("/mahasiswa/:id_mhs", async (req, res) => {
 // Memberikan feedback dan rating terhadap kegiatan
 // app.post("/kegiatan/:id_kegiatan/feedback", async (req, res) => {
 //   try {
-//     const { id_mhs, rating, feedback } = req.body;
+//     const { id_mhs, rating, feedback, id_kegiatan} = req.body;
 //     const feedbackKegiatan = await prisma.feedback.create({
 //       data: {
 //         id_mhs: id_mhs,
