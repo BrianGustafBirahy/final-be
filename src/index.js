@@ -205,10 +205,11 @@ app.get("/rating", async (req, res) => {
 
 // Tambah RAting
 app.post("/rating", async (req, res) => {
-  const { id_mhs, id_kegiatan, rating } = req.body;
+  const { id_rate, id_mhs, id_kegiatan, rating } = req.body;
   try {
     await prisma.rating.create({
       data: {
+        id_rate : id_rate,
         id_mhs  : id_mhs,
         id_kegiatan : id_kegiatan,
         rating   : rating
@@ -224,6 +225,42 @@ app.post("/rating", async (req, res) => {
   }
 });
 
+////////////////////////////////////////////////////            FeedBack            ////////////////////////////////////////////////////
+//  Get all Rating
+app.get("/feedback", async (req, res) => {
+  try {
+    const allFeedback = await prisma.feedback.findMany();
+    console.log(allFeedback);
+    res.status(200).json({
+      status: "success",
+      data: allFeedback,
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
+// Tambah RAting
+app.post("/feedback", async (req, res) => {
+  const { id_fb, id_mhs, id_kegiatan } = req.body;
+  try {
+    await prisma.feedback.create({
+      data: {
+        id_fb  : id_fb,
+        id_mhs : id_mhs,
+        id_kegiatan   : id_kegiatan
+      },
+    });
+    res.status(200).json({
+      status: "success",
+      message: "data berhasil dimasukan",
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Internal Server Error");
+  }
+});
 
 
 
