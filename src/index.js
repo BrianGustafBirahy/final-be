@@ -187,7 +187,42 @@ app.post("/pendaftaran", async (req, res) => {
   }
 });
 
+////////////////////////////////////////////////////            Rating            ////////////////////////////////////////////////////
+//  Get all Rating
+app.get("/rating", async (req, res) => {
+  try {
+    const allRating = await prisma.rating.findMany();
+    console.log(allRating);
+    res.status(200).json({
+      status: "success",
+      data: allRating,
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Internal Server Error");
+  }
+});
 
+// Tambah RAting
+app.post("/rating", async (req, res) => {
+  const { id_mhs, id_kegiatan, rating } = req.body;
+  try {
+    await prisma.rating.create({
+      data: {
+        id_mhs  : id_mhs,
+        id_kegiatan : id_kegiatan,
+        rating   : rating
+      },
+    });
+    res.status(200).json({
+      status: "success",
+      message: "data berhasil dimasukan",
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Internal Server Error");
+  }
+});
 
 
 
