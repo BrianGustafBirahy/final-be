@@ -23,7 +23,7 @@ app.get("/", async (req, res) => {
 
 
 
-////////////////////////////////////////////////////            GET ALL              ////////////////////////////////////////////////////
+////////////////////////////////////////////////////            Mahasiswa            ////////////////////////////////////////////////////
 //  Get all mahasiswa
 app.get("/mahasiswa", async (req, res) => {
   try {
@@ -39,6 +39,44 @@ app.get("/mahasiswa", async (req, res) => {
   }
 });
 
+//////// Tambahkan mahasiswa
+app.post("/mahasiswa", async (req, res) => {
+  const { nama_mhs, email_mhs, jurusan, Tingkat } = req.body;
+  try {
+    await prisma.Mahasiswa.create({
+      data: {
+        nama_mhs  : nama_mhs,
+        email_mhs : email_mhs,
+        jurusan   : jurusan,
+        Tingkat   : Tingkat
+      },
+    });
+    res.status(200).json({
+      status: "success",
+      message: "data berhasil dimasukan",
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
+// Cari mahasiswa by id
+app.get("/mahasiswa/:id_mhs", async (req, res) => {
+  try {
+    const { id_mhs } = req.params;
+    const mahasiswa = await prisma.mahasiswa.findUnique({
+      where: {
+        id_mhs: Number(id_mhs),
+      },
+    });
+    res.json(mahasiswa);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+////////////////////////////////////////////////////            Kegiatan            ////////////////////////////////////////////////////
 //  Get all kegiatan
 app.get("/kegiatan", async (req, res) => {
   try {
@@ -53,6 +91,31 @@ app.get("/kegiatan", async (req, res) => {
     res.status(500).send("Internal Server Error");
   }
 });
+
+// Tambahkan Kegiatan
+app.post("/kegiatan", async (req, res) => {
+  const { nm_kegiatan, id_py, id_admin, deskripsi, jadwal } = req.body;
+  try {
+    await prisma.kegiatan.create({
+      data: {
+        nm_kegiatan  : nm_kegiatan,
+        id_py : id_py,
+        id_admin   : id_admin,
+        deskripsi   : deskripsi,
+        jadwal  : jadwal
+      },
+    });
+    res.status(200).json({
+      status: "success",
+      message: "data berhasil dimasukan",
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
+////////////////////////////////////////////////////            Admin            ////////////////////////////////////////////////////
 
 //  Get all Admin
 app.get("/admin", async (req, res) => {
@@ -86,50 +149,9 @@ app.get("/pendaftaran", async (req, res) => {
 
 
 
-//////// Tambahkan mahasiswa
-
-app.post("/mahasiswa", async (req, res) => {
-  const { nama_mhs, email_mhs, jurusan, Tingkat } = req.body;
-  try {
-    await prisma.Mahasiswa.create({
-      data: {
-        nama_mhs  : nama_mhs,
-        email_mhs : email_mhs,
-        jurusan   : jurusan,
-        Tingkat   : Tingkat
-      },
-    });
-    res.status(200).json({
-      status: "success",
-      message: "data berhasil dimasukan",
-    });
-  } catch (err) {
-    console.error(err);
-    res.status(500).send("Internal Server Error");
-  }
-});
 
 
 
-////////////////////////// Masih error
-
-// Cari mahasiswa by id
-app.get("/mahasiswa/:id_mhs", async (req, res) => {
-  try {
-    const { id_mhs } = req.params;
-    const mahasiswa = await prisma.mahasiswa.findUnique({
-      where: {
-        id_mhs: Number(id_mhs),
-      },
-    });
-    res.json(mahasiswa);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
-
-
-///////////////////////////////////////////////////// Menambahkan /////////////////////////////////////////////////
 
 /////////////////////////////////////////////// MAHASISWA //////////////////////////////////////////////////////
 // app.post("/pendaftaran", async (req, res) => {
