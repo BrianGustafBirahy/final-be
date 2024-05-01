@@ -116,7 +116,6 @@ app.post("/kegiatan", async (req, res) => {
 });
 
 ////////////////////////////////////////////////////            Admin            ////////////////////////////////////////////////////
-
 //  Get all Admin
 app.get("/admin", async (req, res) => {
   try {
@@ -132,6 +131,28 @@ app.get("/admin", async (req, res) => {
   }
 });
 
+// Tambah Admin
+app.post("/admin", async (req, res) => {
+  const { id_admin, nama_adm, email_adm } = req.body;
+  try {
+    await prisma.kegiatan.create({
+      data: {
+        id_admin  : id_admin,
+        nama_adm : nama_adm,
+        email_adm   : email_adm
+      },
+    });
+    res.status(200).json({
+      status: "success",
+      message: "data berhasil dimasukan",
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
+////////////////////////////////////////////////////            Pendaftaran            ////////////////////////////////////////////////////
 //  Get all Pendaftaran
 app.get("/pendaftaran", async (req, res) => {
   try {
