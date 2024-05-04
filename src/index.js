@@ -74,6 +74,17 @@ app.get("/mahasiswa/:id_mhs", async (req, res) => {
   }
 });
 
+// Delete mahasiswa
+app.delete("/mahasiswa/:id_mhs", async(req, res)=> {
+  const idMahasiswa = req.params.id_mhs;
+  await prisma.mahasiswa.delete({
+    where : {
+      id_mhs : parseInt(idMahasiswa),
+    },
+  });
+  res.send("Data mahasiswa sudah terhapus");
+});
+
 ////////////////////////////////////////////////////            Kegiatan            ////////////////////////////////////////////////////
 //  Get all kegiatan
 app.get("/kegiatan", async (req, res) => {
