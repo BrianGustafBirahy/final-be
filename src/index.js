@@ -128,9 +128,9 @@ app.patch("/mahasiswa/:id_mhs", async(req, res)=>{
     },
     data : {
       nama_mhs  : dataMahasiswa.nama_mhs,
-        email_mhs : dataMahasiswa.email_mhs,
-        jurusan   : dataMahasiswa.jurusan,
-        Tingkat   : dataMahasiswa.Tingkat
+      email_mhs : dataMahasiswa.email_mhs,
+      jurusan   : dataMahasiswa.jurusan,
+      Tingkat   : dataMahasiswa.Tingkat
     },
   });
   res.send  ({
@@ -157,10 +157,11 @@ app.get("/kegiatan", async (req, res) => {
 
 // Tambahkan Kegiatan
 app.post("/kegiatan", async (req, res) => {
-  const { nm_kegiatan, id_py, id_admin, deskripsi, jadwal } = req.body;
+  const newKegiatan = { id_kegiatan, nm_kegiatan, id_py, id_admin, deskripsi, jadwal } = req.body;
   try {
     await prisma.kegiatan.create({
       data: {
+        id_kegiatan : id_kegiatan,
         nm_kegiatan  : nm_kegiatan,
         id_py : id_py,
         id_admin   : id_admin,
@@ -169,6 +170,7 @@ app.post("/kegiatan", async (req, res) => {
       },
     });
     res.status(200).json({
+      data : newKegiatan,
       status: "success",
       message: "data berhasil dimasukan",
     });
@@ -176,6 +178,17 @@ app.post("/kegiatan", async (req, res) => {
     console.error(err);
     res.status(500).send("Internal Server Error");
   }
+});
+
+// Delete kegiatan
+app.delete("/kegiatan/:id_kegiatan", async(req, res)=> {
+  const idKegiatan = req.params.id_kegiatan;
+  await prisma.kegiatan.delete({
+    where : {
+      id_kegiatan : idKegiatan,
+    },
+  });
+  res.send("Kegiatan sudah terhapus");
 });
 
 ////////////////////////////////////////////////////            Admin            ////////////////////////////////////////////////////
@@ -342,6 +355,21 @@ app.post("/feedback", async (req, res) => {
     res.status(200).json({
       status: "success",
       message: "data berhasil dimasukan",
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
+// /////////////////////////////////////////////////////////  PENYELENGGARA  /////////////////////////////////////////////////////////////
+app.get("/penyelenggara", async (req, res) => {
+  try {
+    const allPenyelenggara = await prisma.penyelenggara.findMany();
+    console.log(allPenyelenggara);
+    res.status(200).json({
+      status: "success",
+      data: allPenyelenggara,
     });
   } catch (err) {
     console.error(err);

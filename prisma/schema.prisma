@@ -32,7 +32,7 @@ model Kegiatan{
   id_kegiatan String @id @db.VarChar(50)
   nm_kegiatan String @db.VarChar(50)
   id_py String @db.VarChar(50)
-  id_admin Int
+  id_admin String @db.VarChar(50)
   deskripsi String @db.VarChar(150)
   jadwal DateTime @default(now())
 }
