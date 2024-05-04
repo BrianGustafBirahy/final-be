@@ -226,7 +226,7 @@ app.post("/rating", async (req, res) => {
 });
 
 ////////////////////////////////////////////////////            FeedBack            ////////////////////////////////////////////////////
-//  Get all Rating
+//  Get all feedback
 app.get("/feedback", async (req, res) => {
   try {
     const allFeedback = await prisma.feedback.findMany();
@@ -241,15 +241,37 @@ app.get("/feedback", async (req, res) => {
   }
 });
 
-// Tambah RAting
+// Tambah Feedback
+// app.post("/feedback", async (req, res) => {
+//   const { id_fb, id_mhs, id_kegiatan, comment } = req.body;
+//   try {
+//     await prisma.feedback.create({
+//       data: {
+//         id_fb  : id_fb,
+//         id_mhs : id_mhs,
+//         id_kegiatan   : id_kegiatan,
+//         comment : comment
+//       },
+//     });
+//     res.status(200).json({
+//       status: "success",
+//       message: "data berhasil dimasukan",
+//     });
+//   } catch (err) {
+//     console.error(err);
+//     res.status(500).send("Internal Server Error");
+//   }
+// });
+
 app.post("/feedback", async (req, res) => {
-  const { id_fb, id_mhs, id_kegiatan } = req.body;
+  const { id_fb, id_mhs, id_kegiatan, comment } = req.body;
   try {
     await prisma.feedback.create({
       data: {
         id_fb  : id_fb,
         id_mhs : id_mhs,
-        id_kegiatan   : id_kegiatan
+        id_kegiatan   : id_kegiatan,
+        comment : comment
       },
     });
     res.status(200).json({

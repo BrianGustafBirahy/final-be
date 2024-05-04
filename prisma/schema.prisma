@@ -60,4 +60,5 @@ model Feedback{
   id_fb String @id @db.VarChar(50)
   id_mhs Int
   id_kegiatan String @db.VarChar(50)
+  comment String @db.VarChar(255)
 }
