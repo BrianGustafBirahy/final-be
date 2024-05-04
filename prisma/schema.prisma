@@ -1,0 +1,64 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Mahasiswa {
+  id_mhs Int @id @default(autoincrement())
+  nama_mhs String 
+  email_mhs String 
+  jurusan String 
+  Tingkat Int
+}
+
+model Pendaftaran{
+  id_pendaftaran Int @id @default(autoincrement())
+  id_kegiatan String @db.VarChar(50)
+  id_mhs Int
+  tgl_pdf DateTime @default(now())
+}
+
+model Kegiatan{
+  id_kegiatan String @id @db.VarChar(50)
+  nm_kegiatan String @db.VarChar(50)
+  id_py String @db.VarChar(50)
+  id_admin String @db.VarChar(50)
+  deskripsi String @db.VarChar(150)
+  jadwal DateTime @default(now())
+}
+
+model Penyelenggara {
+  id_py String @id @db.VarChar(50)
+  nama_py String @db.VarChar(50)
+  kontak String @db.VarChar(50)
+}
+
+model AdminUniv {
+  id_admin String @id @db.VarChar(50)
+  nama_adm String @db.VarChar(50)
+  email_adm String @db.VarChar(50)
+}
+
+model Rating{
+  id_rate String @id @db.VarChar(50)
+  id_mhs Int
+  id_kegiatan String @db.VarChar(50) 
+  rating String @db.Char(10)
+}
+
+model Feedback{
+  id_fb String @id @db.VarChar(50)
+  id_mhs Int
+  id_kegiatan String @db.VarChar(50)
+  comment String @db.VarChar(255)
+}
