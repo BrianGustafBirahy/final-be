@@ -387,6 +387,7 @@ app.post("/feedback", async (req, res) => {
 });
 
 // /////////////////////////////////////////////////////////  PENYELENGGARA  /////////////////////////////////////////////////////////////
+// get all penyelenggara
 app.get("/penyelenggara", async (req, res) => {
   try {
     const allPenyelenggara = await prisma.penyelenggara.findMany();
@@ -400,6 +401,28 @@ app.get("/penyelenggara", async (req, res) => {
     res.status(500).send("Internal Server Error");
   }
 });
+
+app.post("/penyelenggara", async (req, res) => {
+  const newPenyelenggara = { id_py, nama_py, kontak } = req.body;
+  try {
+    await prisma.penyelenggara.create({
+      data: {
+        id_py : id_py,
+        nama_py  : nama_py,
+        kontak : kontak
+      },
+    });
+    res.status(200).json({
+      data : newPenyelenggara,
+      status: "success",
+      message: "data berhasil dimasukan",
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
 
 
 
