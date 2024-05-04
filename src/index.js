@@ -191,6 +191,30 @@ app.delete("/kegiatan/:id_kegiatan", async(req, res)=> {
   res.send("Kegiatan sudah terhapus");
 });
 
+// Modifikasi salah satu data menggunakan patch
+app.patch("/kegiatan/:id_kegiatan", async(req, res)=>{
+  const idKegiatan= req.params.id_kegiatan;
+  const dataKegiatan = req.body;
+
+  const kegiatan = await prisma.kegiatan.update({
+    where : {
+      id_kegiatan :idKegiatan
+    },
+    data : {
+      id_kegiatan : dataKegiatan.id_kegiatan,
+      nm_kegiatan  : dataKegiatan.nm_kegiatan,
+      id_py : dataKegiatan.id_py,
+      id_admin   : dataKegiatan.id_admin,
+      deskripsi   : dataKegiatan.deskripsi,
+      jadwal  : dataKegiatan.jadwal
+    },
+  });
+  res.send  ({
+    data : kegiatan,
+    message : "Edit data kegiatan sukses"
+  })
+})
+
 ////////////////////////////////////////////////////            Admin            ////////////////////////////////////////////////////
 //  Get all Admin
 app.get("/admin", async (req, res) => {
