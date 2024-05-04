@@ -252,6 +252,38 @@ app.post("/admin", async (req, res) => {
   }
 });
 
+// Delete admin
+app.delete("/admin/:id_admin", async(req, res)=> {
+  const idAdmin = req.params.id_admin;
+  await prisma.adminUniv.delete({
+    where : {
+      id_admin : idAdmin,
+    },
+  });
+  res.send("Admin sudah terhapus");
+});
+
+// Modifikasi salah satu data menggunakan patch
+app.patch("/admin/:id_admin", async(req, res)=>{
+  const idAdmin= req.params.id_admin;
+  const dataAdmin = req.body;
+
+  const admin = await prisma.adminUniv.update({
+    where : {
+      id_admin :idAdmin
+    },
+    data : {
+      id_admin : dataAdmin.id_admin,
+      nama_adm  : dataAdmin.nama_adm,
+      email_adm : dataAdmin.email_adm
+    },
+  });
+  res.send  ({
+    data : admin,
+    message : "Edit data kegiatan sukses"
+  })
+})
+
 ////////////////////////////////////////////////////            Pendaftaran            ////////////////////////////////////////////////////
 //  Get all Pendaftaran
 app.get("/pendaftaran", async (req, res) => {
@@ -305,7 +337,7 @@ app.get("/rating", async (req, res) => {
   }
 });
 
-// Tambah RAting
+// Tambah Rating
 app.post("/rating", async (req, res) => {
   const { id_rate, id_mhs, id_kegiatan, rating } = req.body;
   try {
@@ -344,27 +376,6 @@ app.get("/feedback", async (req, res) => {
 });
 
 // Tambah Feedback
-// app.post("/feedback", async (req, res) => {
-//   const { id_fb, id_mhs, id_kegiatan, comment } = req.body;
-//   try {
-//     await prisma.feedback.create({
-//       data: {
-//         id_fb  : id_fb,
-//         id_mhs : id_mhs,
-//         id_kegiatan   : id_kegiatan,
-//         comment : comment
-//       },
-//     });
-//     res.status(200).json({
-//       status: "success",
-//       message: "data berhasil dimasukan",
-//     });
-//   } catch (err) {
-//     console.error(err);
-//     res.status(500).send("Internal Server Error");
-//   }
-// });
-
 app.post("/feedback", async (req, res) => {
   const { id_fb, id_mhs, id_kegiatan, comment } = req.body;
   try {
