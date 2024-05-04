@@ -85,6 +85,37 @@ app.delete("/mahasiswa/:id_mhs", async(req, res)=> {
   res.send("Data mahasiswa sudah terhapus");
 });
 
+// Modifikasi data 
+app.put("/mahasiswa/:id_mhs", async(req, res)=>{
+  const idMahasiswa= req.params.id_mhs;
+  const dataMahasiswa = req.body;
+
+  if (
+    !(
+      dataMahasiswa.nama_mhs && 
+      dataMahasiswa.email_mhs && 
+      dataMahasiswa.jurusan && 
+      dataMahasiswa.Tingkat
+    )
+  ) {
+    res.status(400).send("Ada data yang tidak terisi") 
+  }
+  const mahasiswa = await prisma.mahasiswa.update({
+    where : {
+      id_mhs : parseInt(idMahasiswa)
+    },
+    data : {
+      nama_mhs  : dataMahasiswa.nama_mhs,
+        email_mhs : dataMahasiswa.email_mhs,
+        jurusan   : dataMahasiswa.jurusan,
+        Tingkat   : dataMahasiswa.Tingkat
+    },
+  });
+  res.send  ({
+    data : mahasiswa,
+    message : "Edit data mahasiswa sukses"
+  })
+})
 ////////////////////////////////////////////////////            Kegiatan            ////////////////////////////////////////////////////
 //  Get all kegiatan
 app.get("/kegiatan", async (req, res) => {
