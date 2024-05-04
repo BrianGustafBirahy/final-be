@@ -116,6 +116,29 @@ app.put("/mahasiswa/:id_mhs", async(req, res)=>{
     message : "Edit data mahasiswa sukses"
   })
 })
+
+// Modifikasi salah satu data menggunakan patch
+app.patch("/mahasiswa/:id_mhs", async(req, res)=>{
+  const idMahasiswa= req.params.id_mhs;
+  const dataMahasiswa = req.body;
+
+  const mahasiswa = await prisma.mahasiswa.update({
+    where : {
+      id_mhs : parseInt(idMahasiswa)
+    },
+    data : {
+      nama_mhs  : dataMahasiswa.nama_mhs,
+        email_mhs : dataMahasiswa.email_mhs,
+        jurusan   : dataMahasiswa.jurusan,
+        Tingkat   : dataMahasiswa.Tingkat
+    },
+  });
+  res.send  ({
+    data : mahasiswa,
+    message : "Edit data mahasiswa sukses"
+  })
+})
+
 ////////////////////////////////////////////////////            Kegiatan            ////////////////////////////////////////////////////
 //  Get all kegiatan
 app.get("/kegiatan", async (req, res) => {
