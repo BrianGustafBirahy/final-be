@@ -280,7 +280,7 @@ app.patch("/admin/:id_admin", async(req, res)=>{
   });
   res.send  ({
     data : admin,
-    message : "Edit data kegiatan sukses"
+    message : "Edit data admin sukses"
   })
 })
 
@@ -320,6 +320,8 @@ app.post("/pendaftaran", async (req, res) => {
     res.status(500).send("Internal Server Error");
   }
 });
+
+
 
 ////////////////////////////////////////////////////            Rating            ////////////////////////////////////////////////////
 //  Get all Rating
@@ -433,6 +435,37 @@ app.post("/penyelenggara", async (req, res) => {
     res.status(500).send("Internal Server Error");
   }
 });
+
+// Delete penyelenggara
+app.delete("/penyelenggara/:id_py", async(req, res)=> {
+  const idpy = req.params.id_py;
+  await prisma.penyelenggara.delete({
+    where : {
+      id_py : idpy,
+    },
+  });
+  res.send("penyelenggara sudah terhapus");
+});
+
+app.patch("/penyelenggara/:id_py", async(req, res)=>{
+  const idpy= req.params.id_py;
+  const datapy = req.body;
+
+  const penyelenggara = await prisma.penyelenggara.update({
+    where : {
+      id_py :idpy
+    },
+    data : {
+      id_py : datapy.id_py,
+      nama_py  : datapy.nama_py,
+      kontak : datapy.kontak
+    },
+  });
+  res.send  ({
+    data : penyelenggara,
+    message : "Edit data penyelenggara sukses"
+  })
+})
 
 
 
