@@ -39,42 +39,8 @@ app.use('/pendaftaran', pendaftaranController)
 
 
 ////////////////////////////////////////////////////            Rating            ////////////////////////////////////////////////////
-//  Get all Rating
-app.get("/rating", async (req, res) => {
-  try {
-    const allRating = await prisma.rating.findMany();
-    console.log(allRating);
-    res.status(200).json({
-      status: "success",
-      data: allRating,
-    });
-  } catch (err) {
-    console.error(err);
-    res.status(500).send("Internal Server Error");
-  }
-});
-
-// Tambah Rating
-app.post("/rating", async (req, res) => {
-  const { id_rate, id_mhs, id_kegiatan, rating } = req.body;
-  try {
-    await prisma.rating.create({
-      data: {
-        id_rate : id_rate,
-        id_mhs  : id_mhs,
-        id_kegiatan : id_kegiatan,
-        rating   : rating
-      },
-    });
-    res.status(200).json({
-      status: "success",
-      message: "data berhasil dimasukan",
-    });
-  } catch (err) {
-    console.error(err);
-    res.status(500).send("Internal Server Error");
-  }
-});
+const ratingController = require("./rating/rating.controller")
+app.use('/rating', ratingController)
 
 ////////////////////////////////////////////////////            FeedBack            ////////////////////////////////////////////////////
 //  Get all feedback
