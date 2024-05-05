@@ -499,6 +499,7 @@ app.delete("/penyelenggara/:id_py", async(req, res)=> {
   res.send("penyelenggara sudah terhapus");
 });
 
+// Modifikasi data penyelenggara
 app.patch("/penyelenggara/:id_py", async(req, res)=>{
   const idpy= req.params.id_py;
   const datapy = req.body;
@@ -519,54 +520,41 @@ app.patch("/penyelenggara/:id_py", async(req, res)=>{
   })
 })
 
+// Get all mahasiswa and kegiatan data by kegiatan id for a penyelenggara
+app.get("/penyelenggara/:id_py/kegiatan/:id_kegiatan/mahasiswa", async (req, res) => {
+  try {
+    const { id_py, id_kegiatan } = req.params;
+    const kegiatanPenyelenggara = await prisma.Kegiatan.findUnique({
+      where: {
+        id_kegiatan: id_kegiatan,
+      },
+      include: {
+        pendaftaran: {
+          include: {
+            mahasiswa: true,
+          },
+        },
+      },
+    });
+    if (kegiatanPenyelenggara.id_py !== id_py) {
+      return res.status(400).json({ error: "Penyelenggara id does not match with the kegiatan" });
+    }
+    const mahasiswa = kegiatanPenyelenggara.pendaftaran.map((pendaftaran) => {
+      return {
+        kegiatan: {
+          id_kegiatan: kegiatanPenyelenggara.id_kegiatan,
+          nm_kegiatan: kegiatanPenyelenggara.nm_kegiatan,
+        },
+        mahasiswa: pendaftaran.mahasiswa,
+        
+      };
+    });
+    res.json(mahasiswa);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
 
-
-
-
-// Melihat jadwal kegiatan yang diikuti
-// app.get("/mahasiswa/:id_mhs/jadwal", async (req, res) => {
-//   try {
-//     const { id_mhs } = req.params;
-//     const jadwalKegiatan = await prisma.jadwal.findMany({
-//       where: {
-//         id_mhs: id_mhs
-//       }
-//     });
-//     res.status(200).json({
-//       status: "success",
-//       data: jadwalKegiatan,
-//     });
-//   } catch (err) {
-//     console.error(err);
-//     res.status(500).send("Internal Server Error");
-//   }
-// });
-///////////////////ERROR
-
-///////////////////////////////////belum jadi
-
-// Memberikan feedback dan rating terhadap kegiatan
-// app.post("/kegiatan/:id_kegiatan/feedback", async (req, res) => {
-//   try {
-//     const { id_mhs, rating, feedback, id_kegiatan} = req.body;
-//     const feedbackKegiatan = await prisma.feedback.create({
-//       data: {
-//         id_mhs: id_mhs,
-//         id_kegiatan: req.params.id_kegiatan,
-//         rating: rating,
-//         feedback: feedback
-//       }
-//     });
-//     res.status(200).json({
-//       status: "success",
-//       data: feedbackKegiatan,
-//     });
-//   } catch (err) {
-//     console.error(err);
-//     res.status(500).send("Internal Server Error");
-//   }
-// });
-//////////////////////////////////masih error
 
 
 app.listen(port, () =>

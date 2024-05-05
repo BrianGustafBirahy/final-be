@@ -39,12 +39,14 @@ model Kegiatan{
   deskripsi String @db.VarChar(150)
   jadwal DateTime @default(now())
   pendaftaran Pendaftaran[]
+  penyelenggara Penyelenggara @relation(fields: [id_py], references: [id_py])
 }
 
 model Penyelenggara {
   id_py String @id @db.VarChar(50)
   nama_py String @db.VarChar(50)
   kontak String @db.VarChar(50)
+  kegiatan Kegiatan[]
 }
 
 model AdminUniv {
