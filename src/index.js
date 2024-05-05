@@ -139,6 +139,36 @@ app.patch("/mahasiswa/:id_mhs", async(req, res)=>{
   })
 })
 
+// Get all kegiatan and mahasiswa data by mahasiswa id
+app.get("/mahasiswa/:id_mhs/kegiatan", async (req, res) => {
+  try {
+    const { id_mhs } = req.params;
+    const kegiatanMahasiswa = await prisma.Pendaftaran.findMany({
+      where: {
+        id_mhs: Number(id_mhs),
+      },
+      include: {
+        kegiatan: true,
+        mahasiswa: {
+          select: {
+            nama_mhs: true,
+            id_mhs: true,
+          },
+        },
+      },
+    });
+    const kegiatan = kegiatanMahasiswa.map((pendaftaran) => {
+      return {
+        mahasiswa: pendaftaran.mahasiswa,
+        kegiatan: pendaftaran.kegiatan,
+      };
+    });
+    res.json(kegiatan);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 ////////////////////////////////////////////////////            Kegiatan            ////////////////////////////////////////////////////
 //  Get all kegiatan
 app.get("/kegiatan", async (req, res) => {
@@ -214,6 +244,28 @@ app.patch("/kegiatan/:id_kegiatan", async(req, res)=>{
     message : "Edit data kegiatan sukses"
   })
 })
+
+// app.get("/kegiatan/:id_kegiatan/mahasiswa", async (req, res) => {
+//   const idKegiatan = req.params.id_kegiatan;
+//   try {
+//     const mahasiswaParticipating = await prisma.feedback.findMany({
+//       where: {
+//         id_kegiatan: idKegiatan,
+//       },
+//       include: {
+//         mahasiswa: true,
+//       },
+//     });
+//     res.status(200).json({
+//       status: "success",
+//       data: mahasiswaParticipating.map((feedback) => feedback.mahasiswa),
+//     });
+//   } catch (err) {
+//     console.error(err);
+//     res.status(500).send("Internal Server Error");
+//   }
+// }); 
+              // Errorrr
 
 ////////////////////////////////////////////////////            Admin            ////////////////////////////////////////////////////
 //  Get all Admin
@@ -470,6 +522,7 @@ app.patch("/penyelenggara/:id_py", async(req, res)=>{
 
 
 
+
 // Melihat jadwal kegiatan yang diikuti
 // app.get("/mahasiswa/:id_mhs/jadwal", async (req, res) => {
 //   try {
@@ -488,6 +541,7 @@ app.patch("/penyelenggara/:id_py", async(req, res)=>{
 //     res.status(500).send("Internal Server Error");
 //   }
 // });
+///////////////////ERROR
 
 ///////////////////////////////////belum jadi
 

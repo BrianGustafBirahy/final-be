@@ -19,6 +19,7 @@ model Mahasiswa {
   email_mhs String 
   jurusan String 
   Tingkat Int
+  pendaftaran Pendaftaran[]
 }
 
 model Pendaftaran{
@@ -26,6 +27,8 @@ model Pendaftaran{
   id_kegiatan String @db.VarChar(50)
   id_mhs Int
   tgl_pdf DateTime @default(now())
+  mahasiswa Mahasiswa @relation(fields: [id_mhs], references: [id_mhs])
+  kegiatan Kegiatan @relation(fields: [id_kegiatan], references: [id_kegiatan])
 }
 
 model Kegiatan{
@@ -35,6 +38,7 @@ model Kegiatan{
   id_admin String @db.VarChar(50)
   deskripsi String @db.VarChar(150)
   jadwal DateTime @default(now())
+  pendaftaran Pendaftaran[]
 }
 
 model Penyelenggara {
