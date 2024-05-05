@@ -36,49 +36,13 @@ app.use('/admin', adminController);
 const pendaftaranController = require("./pendaftaran/pendaftaran.controller")
 app.use('/pendaftaran', pendaftaranController)
 
-
-
 ////////////////////////////////////////////////////            Rating            ////////////////////////////////////////////////////
 const ratingController = require("./rating/rating.controller")
 app.use('/rating', ratingController)
 
 ////////////////////////////////////////////////////            FeedBack            ////////////////////////////////////////////////////
-//  Get all feedback
-app.get("/feedback", async (req, res) => {
-  try {
-    const allFeedback = await prisma.feedback.findMany();
-    console.log(allFeedback);
-    res.status(200).json({
-      status: "success",
-      data: allFeedback,
-    });
-  } catch (err) {
-    console.error(err);
-    res.status(500).send("Internal Server Error");
-  }
-});
-
-// Tambah Feedback
-app.post("/feedback", async (req, res) => {
-  const { id_fb, id_mhs, id_kegiatan, comment } = req.body;
-  try {
-    await prisma.feedback.create({
-      data: {
-        id_fb  : id_fb,
-        id_mhs : id_mhs,
-        id_kegiatan   : id_kegiatan,
-        comment : comment
-      },
-    });
-    res.status(200).json({
-      status: "success",
-      message: "data berhasil dimasukan",
-    });
-  } catch (err) {
-    console.error(err);
-    res.status(500).send("Internal Server Error");
-  }
-});
+const feedbackController = require("./feedback/feedback.controller")
+app.use('/feedback', feedbackController)
 
 // /////////////////////////////////////////////////////////  PENYELENGGARA  /////////////////////////////////////////////////////////////
 // get all penyelenggara
