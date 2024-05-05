@@ -29,73 +29,8 @@ const kegiatanController = require("./kegiatan/kegiatan.controller")
 app.use('/kegiatan', kegiatanController);
 
 ////////////////////////////////////////////////////            Admin            ////////////////////////////////////////////////////
-//  Get all Admin
-app.get("/admin", async (req, res) => {
-  try {
-    const allAdmin = await prisma.adminUniv.findMany();
-    console.log(allAdmin);
-    res.status(200).json({
-      status: "success",
-      data: allAdmin,
-    });
-  } catch (err) {
-    console.error(err);
-    res.status(500).send("Internal Server Error");
-  }
-});
-
-// Tambah Admin
-app.post("/admin", async (req, res) => {
-  const { id_admin, nama_adm, email_adm } = req.body;
-  try {
-    await prisma.adminUniv.create({
-      data: {
-        id_admin  : id_admin,
-        nama_adm : nama_adm,
-        email_adm   : email_adm
-      },
-    });
-    res.status(200).json({
-      status: "success",
-      message: "data berhasil dimasukan",
-    });
-  } catch (err) {
-    console.error(err);
-    res.status(500).send("Internal Server Error");
-  }
-});
-
-// Delete admin
-app.delete("/admin/:id_admin", async(req, res)=> {
-  const idAdmin = req.params.id_admin;
-  await prisma.adminUniv.delete({
-    where : {
-      id_admin : idAdmin,
-    },
-  });
-  res.send("Admin sudah terhapus");
-});
-
-// Modifikasi salah satu data menggunakan patch
-app.patch("/admin/:id_admin", async(req, res)=>{
-  const idAdmin= req.params.id_admin;
-  const dataAdmin = req.body;
-
-  const admin = await prisma.adminUniv.update({
-    where : {
-      id_admin :idAdmin
-    },
-    data : {
-      id_admin : dataAdmin.id_admin,
-      nama_adm  : dataAdmin.nama_adm,
-      email_adm : dataAdmin.email_adm
-    },
-  });
-  res.send  ({
-    data : admin,
-    message : "Edit data admin sukses"
-  })
-})
+const adminController = require("./admin/admin.controller")
+app.use('/admin', adminController);
 
 ////////////////////////////////////////////////////            Pendaftaran            ////////////////////////////////////////////////////
 //  Get all Pendaftaran
