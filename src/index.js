@@ -33,41 +33,8 @@ const adminController = require("./admin/admin.controller")
 app.use('/admin', adminController);
 
 ////////////////////////////////////////////////////            Pendaftaran            ////////////////////////////////////////////////////
-//  Get all Pendaftaran
-app.get("/pendaftaran", async (req, res) => {
-  try {
-    const allPendaftaran = await prisma.pendaftaran.findMany();
-    console.log(allPendaftaran);
-    res.status(200).json({
-      status: "success",
-      data: allPendaftaran,
-    });
-  } catch (err) {
-    console.error(err);
-    res.status(500).send("Internal Server Error");
-  }
-});
-
-// Tambah pendaftaran
-app.post("/pendaftaran", async (req, res) => {
-  const { id_kegiatan, id_mhs, tgl_pdf } = req.body;
-  try {
-    await prisma.pendaftaran.create({
-      data: {
-        id_kegiatan  : id_kegiatan,
-        id_mhs : id_mhs,
-        tgl_pdf   : tgl_pdf
-      },
-    });
-    res.status(200).json({
-      status: "success",
-      message: "data berhasil dimasukan",
-    });
-  } catch (err) {
-    console.error(err);
-    res.status(500).send("Internal Server Error");
-  }
-});
+const pendaftaranController = require("./pendaftaran/pendaftaran.controller")
+app.use('/pendaftaran', pendaftaranController)
 
 
 
